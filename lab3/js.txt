@@ -1,0 +1,33 @@
+function showpics(){
+    var html="";
+    var pic= $("#box").val();
+    $.getJSON('http://api.flickr.com/services/feeds/photos_public.gne?tags='
+      +pic+"&tagmode=any&format=json&jsoncallback=?",
+      function(data){ $("#images").hide().html(data).fadeIn('fast');
+
+    $.each(data.items, function(i,item) {
+      
+      html = '<a class="fancybox" title="'+ item.title +'" href="'+ item.media.m+'"><img src="'+item.media.m+'"/></a>';
+	  $("#images").append(html);  
+    });
+                     $(".fancybox").attr('rel', 'gallery').fancybox({
+        beforeShow: function () {
+            if (this.title) {
+                
+                this.title += '<br />';
+                this.title += '<a href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-url="' + this.href + '">Tweet</a> ';
+                this.title += '<iframe src="//www.facebook.com/plugins/like.php?href=' + this.href + '&amp;layout=button_count&amp;show_faces=true&amp;width=500&amp;action=like&amp;font&amp;colorscheme=light&amp;height=23" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:110px; height:23px;" allowTransparency="true"></iframe>';
+            }
+        },
+        afterShow: function() {
+            twttr.widgets.load();
+        },
+        helpers : {
+            title : {
+                type: 'inside'
+            }
+        }  
+    });
+  })
+};
+            
